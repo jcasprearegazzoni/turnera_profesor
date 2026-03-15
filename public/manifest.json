@@ -1,7 +1,7 @@
 {
-  "name": "CourtManager",
-  "short_name": "CourtManager",
-  "description": "Gestión de turnos para profesores de Tenis y Pádel en Argentina",
+  "name": "misu",
+  "short_name": "misu",
+  "description": "Gestion de turnos para profesores de Tenis y Padel en Argentina",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",

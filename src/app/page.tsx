@@ -1,50 +1,38 @@
-/**
- * Landing Page de CourtManager — /
- * Página pública con descripción del servicio y botones de registro.
- */
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import type { Metadata } from "next";
 
+import { Button } from "@/components/ui/button";
+
 export const metadata: Metadata = {
-  title: "Misú — Gestión de turnos para profesores de Padel y Tenis",
+  title: "misu - Gestion de turnos para profesores de Padel y Tenis",
 };
 
 export default function HomePage() {
   return (
     <div className="min-h-screen flex flex-col">
-      {/* Header */}
-      <header className="flex items-center justify-between px-4 md:px-8 h-16 border-b border-border/50">
-        <span className="font-bold text-lg text-primary">🎾 CourtManager</span>
+      <header className="flex h-16 items-center justify-between border-b border-border/50 px-4 md:px-8">
+        <span className="font-bold text-lg text-primary">misu</span>
         <div className="flex gap-2">
           <Button variant="ghost" render={<Link href="/login" />}>
             Ingresar
           </Button>
-          <Button render={<Link href="/registro" />}>
-            Registrarse
-          </Button>
+          <Button render={<Link href="/registro" />}>Registrarse</Button>
         </div>
       </header>
 
-      {/* Hero */}
-      <main className="flex-1 flex flex-col items-center justify-center px-4 py-16 text-center">
+      <main className="flex flex-1 flex-col items-center justify-center px-4 py-16 text-center">
         <div className="max-w-2xl space-y-6">
-
-          {/* Título principal */}
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight">
-            Gestioná tus clases de{" "}
-            <span className="text-primary">Tenis</span> y{" "}
-            <span className="text-primary">Pádel</span>
+          <h1 className="text-4xl font-bold tracking-tight md:text-5xl lg:text-6xl">
+            Gestiona tus clases de <span className="text-primary">Tenis</span> y{" "}
+            <span className="text-primary">Padel</span>
           </h1>
 
-          {/* Subtítulo */}
-          <p className="text-lg text-muted-foreground max-w-lg mx-auto">
-            Organizá tu agenda, gestioná alumnos y controlá tus finanzas.
-            Todo desde una sola app que tus alumnos pueden instalar en su celular.
+          <p className="mx-auto max-w-lg text-lg text-muted-foreground">
+            Organiza tu agenda, gestiona alumnos y controla tus finanzas. Todo
+            desde una sola app que tus alumnos pueden instalar en su celular.
           </p>
 
-          {/* CTAs */}
-          <div className="flex flex-col sm:flex-row gap-3 justify-center pt-4">
+          <div className="flex flex-col justify-center gap-3 pt-4 sm:flex-row">
             <Button
               size="lg"
               className="font-semibold text-base"
@@ -63,37 +51,35 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* Features */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-20 max-w-4xl w-full">
-          <div className="flex flex-col items-center gap-3 p-6 rounded-xl border border-border/50 bg-card">
-            <span className="text-3xl">📅</span>
+        <div className="mt-20 grid w-full max-w-4xl grid-cols-1 gap-6 sm:grid-cols-3">
+          <div className="flex flex-col items-center gap-3 rounded-xl border border-border/50 bg-card p-6">
+            <span className="text-3xl">Turnos</span>
             <h3 className="font-semibold">Turnos online</h3>
-            <p className="text-sm text-muted-foreground text-center">
+            <p className="text-center text-sm text-muted-foreground">
               Tus alumnos reservan directo desde su celular. Sin WhatsApp, sin confusiones.
             </p>
           </div>
 
-          <div className="flex flex-col items-center gap-3 p-6 rounded-xl border border-border/50 bg-card">
-            <span className="text-3xl">💰</span>
+          <div className="flex flex-col items-center gap-3 rounded-xl border border-border/50 bg-card p-6">
+            <span className="text-3xl">Finanzas</span>
             <h3 className="font-semibold">Control financiero</h3>
-            <p className="text-sm text-muted-foreground text-center">
-              Registrá cobros, creá paquetes de clases y sabé quién te debe.
+            <p className="text-center text-sm text-muted-foreground">
+              Registra cobros, crea paquetes de clases y sabe quien te debe.
             </p>
           </div>
 
-          <div className="flex flex-col items-center gap-3 p-6 rounded-xl border border-border/50 bg-card">
-            <span className="text-3xl">📱</span>
+          <div className="flex flex-col items-center gap-3 rounded-xl border border-border/50 bg-card p-6">
+            <span className="text-3xl">PWA</span>
             <h3 className="font-semibold">PWA instalable</h3>
-            <p className="text-sm text-muted-foreground text-center">
+            <p className="text-center text-sm text-muted-foreground">
               Se instala como app en el celular. Sin App Store, sin complicaciones.
             </p>
           </div>
         </div>
       </main>
 
-      {/* Footer */}
       <footer className="border-t border-border/50 px-4 py-6 text-center text-sm text-muted-foreground">
-        <p>© 2026 CourtManager. Hecho con 🎾 en Argentina.</p>
+        <p>© 2026 misu. Hecho en Argentina.</p>
       </footer>
     </div>
   );

@@ -39,6 +39,9 @@ export interface Profile {
   max_students_grupal: number;
   max_students_dual: number;
   cancellation_hours: number;
+  // Campos de contacto
+  phone: string | null;
+  instagram_url: string | null;
   // Campos adicionales para alumnos
   category: string | null; // ej: "5ta", "6ta"
   branch: string | null; // "caballero" | "dama"

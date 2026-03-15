@@ -1,38 +1,27 @@
-/**
- * Navbar del dashboard.
- * Muestra el logo, nombre del usuario, y botón de cerrar sesión.
- * Incluye navegación mobile con Sheet (hamburger menu).
- */
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+
 import SignOutButton from "@/components/auth/SignOutButton";
 import { Button } from "@/components/ui/button";
-import {
-  Sheet,
-  SheetContent,
-  SheetTrigger,
-  SheetTitle,
-} from "@/components/ui/sheet";
-import { useState } from "react";
+import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import type { Profile } from "@/types/database";
 
-// Navegación del profesor
 const PROFESOR_NAV = [
-  { href: "/profesor", label: "Dashboard", icon: "📊" },
-  { href: "/profesor/turnos", label: "Turnos", icon: "📅" },
-  { href: "/profesor/alumnos", label: "Alumnos", icon: "👥" },
-  { href: "/profesor/finanzas", label: "Finanzas", icon: "💰" },
-  { href: "/profesor/perfil", label: "Mi Perfil", icon: "👤" },
+  { href: "/profesor", label: "Dashboard", icon: "Tablero" },
+  { href: "/profesor/turnos", label: "Turnos", icon: "Calendario" },
+  { href: "/profesor/alumnos", label: "Alumnos", icon: "Personas" },
+  { href: "/profesor/finanzas", label: "Finanzas", icon: "Pesos" },
+  { href: "/profesor/perfil", label: "Mi Perfil", icon: "Usuario" },
 ];
 
-// Navegación del alumno
 const ALUMNO_NAV = [
-  { href: "/alumno", label: "Dashboard", icon: "🏠" },
-  { href: "/alumno/reservar", label: "Reservar", icon: "📅" },
-  { href: "/alumno/mis-clases", label: "Mis Clases", icon: "🎾" },
-  { href: "/alumno/perfil", label: "Mi Perfil", icon: "👤" },
+  { href: "/alumno", label: "Dashboard", icon: "Tablero" },
+  { href: "/alumno/reservar", label: "Reservar", icon: "Calendario" },
+  { href: "/alumno/mis-clases", label: "Mis Clases", icon: "Pelota" },
+  { href: "/alumno/perfil", label: "Mi Perfil", icon: "Usuario" },
 ];
 
 interface DashboardNavbarProps {
@@ -42,39 +31,33 @@ interface DashboardNavbarProps {
 export default function DashboardNavbar({ profile }: DashboardNavbarProps) {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
-
-  // Seleccionar la navegación según el rol
   const navItems = profile.role === "profesor" ? PROFESOR_NAV : ALUMNO_NAV;
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="flex h-14 items-center px-4 md:px-6">
-        {/* Hamburger menu (mobile) */}
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
           <SheetTrigger
             render={
-              <Button variant="ghost" size="sm" className="md:hidden mr-2">
+              <Button variant="ghost" size="sm" className="mr-2 md:hidden">
                 <span className="text-lg">☰</span>
               </Button>
             }
           />
           <SheetContent side="left" className="w-64">
-            <SheetTitle className="text-primary font-bold">
-              🎾 CourtManager
-            </SheetTitle>
-            <nav className="flex flex-col gap-1 mt-6">
+            <SheetTitle className="font-bold text-primary">misu</SheetTitle>
+            <nav className="mt-6 flex flex-col gap-1">
               {navItems.map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
                   onClick={() => setIsOpen(false)}
-                  className={`flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors ${
+                  className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors ${
                     pathname === item.href
-                      ? "bg-primary/10 text-primary font-medium"
-                      : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                      ? "bg-primary/10 font-medium text-primary"
+                      : "text-muted-foreground hover:bg-muted hover:text-foreground"
                   }`}
                 >
-                  <span>{item.icon}</span>
                   {item.label}
                 </Link>
               ))}
@@ -82,32 +65,31 @@ export default function DashboardNavbar({ profile }: DashboardNavbarProps) {
           </SheetContent>
         </Sheet>
 
-        {/* Logo */}
-        <Link href={profile.role === "profesor" ? "/profesor" : "/alumno"} className="font-bold text-primary mr-6">
-          🎾 CourtManager
+        <Link
+          href={profile.role === "profesor" ? "/profesor" : "/alumno"}
+          className="mr-6 font-bold text-primary"
+        >
+          misu
         </Link>
 
-        {/* Navegación desktop */}
-        <nav className="hidden md:flex items-center gap-1 flex-1">
+        <nav className="hidden flex-1 items-center gap-1 md:flex">
           {navItems.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center gap-2 px-3 py-2 rounded-md text-sm transition-colors ${
+              className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors ${
                 pathname === item.href
-                  ? "bg-primary/10 text-primary font-medium"
-                  : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                  ? "bg-primary/10 font-medium text-primary"
+                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
               }`}
             >
-              <span>{item.icon}</span>
               {item.label}
             </Link>
           ))}
         </nav>
 
-        {/* Usuario + Sign out */}
-        <div className="flex items-center gap-3 ml-auto">
-          <span className="text-sm text-muted-foreground hidden sm:inline">
+        <div className="ml-auto flex items-center gap-3">
+          <span className="hidden text-sm text-muted-foreground sm:inline">
             {profile.name || "Usuario"}
           </span>
           <SignOutButton />

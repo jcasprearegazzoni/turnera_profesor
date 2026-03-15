@@ -1,16 +1,15 @@
 /**
- * Server Actions para autenticación.
+ * Server Actions para autenticacion.
  * Estas funciones se ejecutan en el servidor y manejan registro, login y logout.
  */
 "use server";
 
-import { createClient } from "@/lib/supabase/server";
-import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
-// ============================================================
-// Registro de nuevo usuario
-// ============================================================
+import { generateUniqueProfileSlug } from "@/lib/profile-slug";
+import { createClient } from "@/lib/supabase/server";
+
 export async function registrarUsuario(formData: {
   email: string;
   password: string;
@@ -22,7 +21,6 @@ export async function registrarUsuario(formData: {
 }) {
   const supabase = await createClient();
 
-  // Crear usuario en Supabase Auth con metadata
   const { data, error } = await supabase.auth.signUp({
     email: formData.email,
     password: formData.password,
@@ -42,33 +40,50 @@ export async function registrarUsuario(formData: {
     return { error: "No se pudo crear el usuario" };
   }
 
-  // Si es alumno, actualizar los campos adicionales en profiles
-  if (formData.role === "alumno" && (formData.category || formData.branch || formData.zone)) {
-    // Esperar un momento para que el trigger cree el perfil
-    await new Promise((resolve) => setTimeout(resolve, 500));
+  await new Promise((resolve) => setTimeout(resolve, 500));
 
-    const { error: updateError } = await supabase
-      .from("profiles")
-      .update({
-        category: formData.category || null,
-        branch: formData.branch || null,
-        zone: formData.zone || null,
-      })
-      .eq("user_id", data.user.id);
+  const generatedSlug = await generateUniqueProfileSlug(
+    formData.name,
+    async (slug) => {
+      const { data: existingProfile } = await supabase
+        .from("profiles")
+        .select("user_id")
+        .eq("username", slug)
+        .maybeSingle();
 
-    if (updateError) {
-      console.error("Error al actualizar perfil de alumno:", updateError);
-    }
+      return existingProfile;
+    },
+    data.user.id
+  );
+
+  const profileUpdate: {
+    username: string;
+    category?: string | null;
+    branch?: string | null;
+    zone?: string | null;
+  } = {
+    username: generatedSlug,
+  };
+
+  if (formData.role === "alumno") {
+    profileUpdate.category = formData.category || null;
+    profileUpdate.branch = formData.branch || null;
+    profileUpdate.zone = formData.zone || null;
   }
 
-  // Revalidar y redirigir al dashboard correspondiente
+  const { error: updateError } = await supabase
+    .from("profiles")
+    .update(profileUpdate)
+    .eq("user_id", data.user.id);
+
+  if (updateError) {
+    console.error("Error al actualizar el perfil despues del registro:", updateError);
+  }
+
   revalidatePath("/", "layout");
   redirect(formData.role === "profesor" ? "/profesor" : "/alumno");
 }
 
-// ============================================================
-// Inicio de sesión
-// ============================================================
 export async function iniciarSesion(formData: {
   email: string;
   password: string;
@@ -84,7 +99,6 @@ export async function iniciarSesion(formData: {
     return { error: error.message };
   }
 
-  // Obtener el rol del usuario para redirigir al dashboard correcto
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -103,9 +117,6 @@ export async function iniciarSesion(formData: {
   redirect(profile?.role === "profesor" ? "/profesor" : "/alumno");
 }
 
-// ============================================================
-// Cerrar sesión
-// ============================================================
 export async function cerrarSesion() {
   const supabase = await createClient();
   await supabase.auth.signOut();

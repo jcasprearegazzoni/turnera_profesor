@@ -1,31 +1,30 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+
 import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 
-// Tipografía Inter como fuente principal
 const inter = Inter({
   variable: "--font-sans",
   subsets: ["latin"],
   display: "swap",
 });
 
-// Metadata de la aplicación — SEO
 export const metadata: Metadata = {
   title: {
-    default: "CourtManager — Gestión de turnos para profes de Tenis y Pádel",
-    template: "%s | CourtManager",
+    default: "misu - Gestion de turnos para profes de Tenis y Padel",
+    template: "%s | misu",
   },
   description:
-    "Organizá tus clases, gestioná alumnos y controlá tus finanzas. La app que todo profesor de Tenis y Pádel necesita.",
+    "Organiza tus clases, gestiona alumnos y controla tus finanzas. La app que todo profesor de Tenis y Padel necesita.",
   keywords: [
     "tenis",
-    "pádel",
+    "padel",
     "turnos",
     "profesor",
     "clases",
     "argentina",
-    "gestión",
+    "gestion",
   ],
   manifest: "/manifest.json",
   icons: {
@@ -42,7 +41,6 @@ export default function RootLayout({
     <html lang="es" suppressHydrationWarning>
       <body className={`${inter.variable} antialiased`}>
         {children}
-        {/* Notificaciones toast globales */}
         <Toaster richColors position="top-right" />
       </body>
     </html>
